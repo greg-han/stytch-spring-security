@@ -1,16 +1,23 @@
 package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 //Replace with lombok
-@ConfigurationProperties(prefix="stytch.config")
+@Component
 public class StytchConfigProperties {
+
+    @Value("${stytch.config.projectid}")
     private String projectid;
+
+    @Value("${stytch.config.projectsecret}")
     private String projectsecret;
 
     public StytchConfigProperties() {
     }
-
     public StytchConfigProperties(String projectid, String projectsecret) {
         this.projectid = projectid;
         this.projectsecret = projectsecret;
