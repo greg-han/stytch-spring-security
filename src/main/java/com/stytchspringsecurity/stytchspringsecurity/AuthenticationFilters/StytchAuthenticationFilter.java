@@ -42,7 +42,7 @@ public class StytchAuthenticationFilter extends AbstractAuthenticationProcessing
         String token = getToken(request.getQueryString());
         StytchOauthAuthenticationRequestToken stytchOauthAuthenticationToken = new StytchOauthAuthenticationRequestToken(token);
         StytchOauthAuthenticationResponseToken stytchOauthResponseToken = (StytchOauthAuthenticationResponseToken) this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
-       // return this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
+        //This may be redundant or in the wrong place.
         SecurityContextHolder.getContext().setAuthentication(stytchOauthResponseToken);
         return stytchOauthResponseToken;
     }
