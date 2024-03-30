@@ -23,8 +23,6 @@ import com.stytch.java.consumer.StytchClient;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-@GregsAnnotationLol
-@Configurable
 public class StytchAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     public StytchAuthenticationFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager){
         super(defaultFilterProcessesUrl, authenticationManager);
@@ -41,10 +39,10 @@ public class StytchAuthenticationFilter extends AbstractAuthenticationProcessing
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String token = getToken(request.getQueryString());
         StytchOauthAuthenticationRequestToken stytchOauthAuthenticationToken = new StytchOauthAuthenticationRequestToken(token);
+        //It may be better to delegate this to the authenticationManager
         StytchOauthAuthenticationResponseToken stytchOauthResponseToken = (StytchOauthAuthenticationResponseToken) this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
-        //This may be redundant or in the wrong place.
-        SecurityContextHolder.getContext().setAuthentication(stytchOauthResponseToken);
         return stytchOauthResponseToken;
     }
+
 
 }

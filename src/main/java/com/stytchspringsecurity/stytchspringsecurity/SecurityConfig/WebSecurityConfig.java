@@ -18,10 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
-    @Autowired
-    StytchAuthenticationSuccessHandler stytchAuthenticationSuccessHandler;
-
     @Bean
     public AuthenticationEventPublisher authenticationEventPublisher() {
         return new DefaultAuthenticationEventPublisher();
@@ -43,6 +39,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http.addFilterBefore(
                 new StytchAuthenticationFilter("/authenticate", authManager), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }
