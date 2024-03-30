@@ -1,7 +1,10 @@
 package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
+import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,9 +15,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public AuthenticationManager authManager(
+            HttpSecurity http,
+            StytchOauthAuthenticationRequestProvider stytchOauthRequestProvider) throws Exception {
+
+        AuthenticationManagerBuilder authenticationManagerBuilder = http
+                .getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(stytchOauthRequestProvider);
+
+        return authenticationManagerBuilder.build();
+    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http.addFilterBefore(
-                new StytchAuthenticationFilter("/authenticate"), UsernamePasswordAuthenticationFilter.class);
+                new StytchAuthenticationFilter("/authenticate", authManager), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
