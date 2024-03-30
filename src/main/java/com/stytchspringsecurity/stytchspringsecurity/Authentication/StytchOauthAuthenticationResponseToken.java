@@ -10,13 +10,13 @@ public class StytchOauthAuthenticationResponseToken extends AbstractAuthenticati
         public StytchOauthAuthenticationResponseToken(String userId, Collection<? extends GrantedAuthority> authorities) {
             super(authorities);
             this.userId = userId;
-            setAuthenticated(false);
+            setAuthenticated(true);
         }
 
         public StytchOauthAuthenticationResponseToken(String userId) {
             super(null);
             this.userId = userId;
-            setAuthenticated(false);
+            setAuthenticated(true);
         }
 
     public StytchOauthAuthenticationResponseToken(Collection<? extends GrantedAuthority> authorities, String userId) {

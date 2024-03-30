@@ -1,9 +1,14 @@
 package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestProvider;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters.StytchAuthenticationFilter;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationHandlers.StytchAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+    StytchAuthenticationSuccessHandler stytchAuthenticationSuccessHandler;
+
+    @Bean
+    public AuthenticationEventPublisher authenticationEventPublisher() {
+        return new DefaultAuthenticationEventPublisher();
+    }
     @Bean
     public AuthenticationManager authManager(
             HttpSecurity http,
@@ -22,9 +34,11 @@ public class WebSecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http
                 .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(stytchOauthRequestProvider);
+        authenticationManagerBuilder.authenticationEventPublisher(authenticationEventPublisher());
 
         return authenticationManagerBuilder.build();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http.addFilterBefore(

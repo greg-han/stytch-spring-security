@@ -16,15 +16,17 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class StytchOauthAuthenticationRequestProvider implements AuthenticationProvider {
     StytchConfigProperties stytchConfigProperties = SpringContext.getBean(StytchConfigProperties.class);
+    String projectid = stytchConfigProperties.getProjectid();
+    String projectsecret = stytchConfigProperties.getprojectsecret();
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String projectid = stytchConfigProperties.getProjectid();
-        String projectsecret = stytchConfigProperties.getprojectsecret();
+        String userId = null;
+        StytchOauthAuthenticationResponseToken stytchOauthAuthenticationResponseToken = null;
         StytchClient.configure(projectid,projectsecret);
         AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials());
         StytchResult<AuthenticateResponse> authenticateResponse;
         try {
-            //This part needs to be put in a custom Authentication Provider
             authenticateResponse = StytchClient.oauth.authenticateCompletable(authenticateRequest).get();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -35,7 +37,11 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
             var exception = ((StytchResult.Error) authenticateResponse).getException();
             System.out.println(exception.getReason());
         } else {
+            //This might be a good place to log the UID of the request
             System.out.println(((StytchResult.Success<?>) authenticateResponse).getValue());
+            userId = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getUserId();
+            stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId);
+            return stytchOauthAuthenticationResponseToken;
         }
         return null;
     }

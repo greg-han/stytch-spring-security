@@ -1,9 +1,12 @@
-package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
+package com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters;
 
 import com.stytch.java.consumer.models.oauth.AuthenticateResponse;
 import com.stytch.java.consumer.models.oauth.AuthenticateRequest;
 import com.stytchspringsecurity.stytchspringsecurity.ApplicationConfig.SpringContext;
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestToken;
+import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
+import com.stytchspringsecurity.stytchspringsecurity.SecurityConfig.GregsAnnotationLol;
+import com.stytchspringsecurity.stytchspringsecurity.SecurityConfig.StytchConfigProperties;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import com.stytch.java.common.StytchResult;
 import com.stytch.java.consumer.StytchClient;
@@ -22,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 @GregsAnnotationLol
 @Configurable
 public class StytchAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    StytchAuthenticationFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager){
+    public StytchAuthenticationFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager){
         super(defaultFilterProcessesUrl, authenticationManager);
     }
     private AuthenticationManager authenticationManager;
@@ -33,17 +37,14 @@ public class StytchAuthenticationFilter extends AbstractAuthenticationProcessing
         }
         return input.substring(tokenIndex + 6);
     }
-    StytchConfigProperties stytchConfigProperties = SpringContext.getBean(StytchConfigProperties.class);
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        System.out.println("I'm trying!");
         String token = getToken(request.getQueryString());
         StytchOauthAuthenticationRequestToken stytchOauthAuthenticationToken = new StytchOauthAuthenticationRequestToken(token);
-
-        System.out.println("I'm trying again!");
-        return this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
+        StytchOauthAuthenticationResponseToken stytchOauthResponseToken = (StytchOauthAuthenticationResponseToken) this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
+       // return this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(stytchOauthResponseToken);
+        return stytchOauthResponseToken;
     }
-
 
 }
