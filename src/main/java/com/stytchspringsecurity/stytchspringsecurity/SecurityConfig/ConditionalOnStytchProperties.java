@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 
 )
 
-public @interface GregsAnnotationLol {
+public @interface ConditionalOnStytchProperties {
 }

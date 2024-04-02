@@ -2,6 +2,8 @@ package com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters;
 
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestToken;
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationHandlers.StytchAuthenticationSuccessHandler;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class StytchAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     public StytchAuthenticationFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager){
         super(defaultFilterProcessesUrl, authenticationManager);
+        setAuthenticationSuccessHandler(new StytchAuthenticationSuccessHandler());
     }
     private AuthenticationManager authenticationManager;
     public static String getToken(String input) {
@@ -31,6 +34,5 @@ public class StytchAuthenticationFilter extends AbstractAuthenticationProcessing
         StytchOauthAuthenticationResponseToken stytchOauthResponseToken = (StytchOauthAuthenticationResponseToken) this.getAuthenticationManager().authenticate(stytchOauthAuthenticationToken);
         return stytchOauthResponseToken;
     }
-
 
 }

@@ -24,7 +24,7 @@ public class StytchOauthAuthenticationResponseToken extends AbstractAuthenticati
         this.userId = userId;
     }
 
-    @Override
+        @Override
         public Object getCredentials() {
             return null;
         }

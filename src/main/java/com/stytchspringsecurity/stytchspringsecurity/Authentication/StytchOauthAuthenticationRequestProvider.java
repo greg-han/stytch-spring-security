@@ -23,8 +23,7 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userId = null;
         StytchOauthAuthenticationResponseToken stytchOauthAuthenticationResponseToken = null;
-        StytchClient.configure(projectid,projectsecret);
-        AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials());
+        AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials(), null,120);
         StytchResult<AuthenticateResponse> authenticateResponse;
         try {
             authenticateResponse = StytchClient.oauth.authenticateCompletable(authenticateRequest).get();

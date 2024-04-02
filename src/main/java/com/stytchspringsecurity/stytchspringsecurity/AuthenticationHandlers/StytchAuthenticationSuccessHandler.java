@@ -14,6 +14,8 @@ import java.io.IOException;
 public class StytchAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        StytchOauthAuthenticationResponseToken resToken = (StytchOauthAuthenticationResponseToken) authentication;
+        System.out.println("Whoah someones in here!");
+        System.out.println(authentication);
+        response.sendRedirect("/");
     }
 }
