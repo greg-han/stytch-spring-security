@@ -22,6 +22,7 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userId = null;
+        String sessionToken = null;
         StytchOauthAuthenticationResponseToken stytchOauthAuthenticationResponseToken = null;
         AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials(), null,120);
         StytchResult<AuthenticateResponse> authenticateResponse;
@@ -39,7 +40,8 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
             //This might be a good place to log the UID of the request
             System.out.println(((StytchResult.Success<?>) authenticateResponse).getValue());
             userId = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getUserId();
-            stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId);
+            sessionToken = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getSessionToken();
+            stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId,sessionToken);
             return stytchOauthAuthenticationResponseToken;
         }
         return null;

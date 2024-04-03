@@ -40,7 +40,8 @@ public class WebSecurityConfig {
                 new StytchAuthenticationFilter("/authenticate", authManager), UsernamePasswordAuthenticationFilter.class);
         //http.sessionManagement()
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
-                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER));
+                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                        .invalidSessionUrl("/"));
         return http.build();
 
     }
