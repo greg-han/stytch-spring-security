@@ -9,24 +9,28 @@ public class StytchOauthAuthenticationResponseToken extends AbstractAuthenticati
         //consider encrypting this field.
         private final String userId;
         private final String sessionToken;
-        public StytchOauthAuthenticationResponseToken(String userId, String sessionToken, Collection<? extends GrantedAuthority> authorities) {
+        private final String providerType;
+        public StytchOauthAuthenticationResponseToken(String userId, String sessionToken, Collection<? extends GrantedAuthority> authorities, String provider) {
             super(authorities);
             this.sessionToken = sessionToken;
             this.userId = userId;
+            this.providerType = provider;
             setAuthenticated(true);
         }
 
-        public StytchOauthAuthenticationResponseToken(String userId, String sessionToken) {
+        public StytchOauthAuthenticationResponseToken(String userId, String sessionToken, String provider) {
             super(null);
             this.userId = userId;
             this.sessionToken = sessionToken;
+            this.providerType = provider;
             setAuthenticated(true);
         }
 
-    public StytchOauthAuthenticationResponseToken(Collection<? extends GrantedAuthority> authorities, String userId, String sessionToken) {
+    public StytchOauthAuthenticationResponseToken(Collection<? extends GrantedAuthority> authorities, String userId, String sessionToken, String provider) {
         super(authorities);
         this.userId = userId;
         this.sessionToken = sessionToken;
+        this.providerType = provider;
     }
 
         @Override
@@ -37,6 +41,11 @@ public class StytchOauthAuthenticationResponseToken extends AbstractAuthenticati
         @Override
         public Object getPrincipal() {
             return this.userId;
+        }
+
+        @Override
+        public Object getDetails(){
+            return this.providerType;
         }
 
 }

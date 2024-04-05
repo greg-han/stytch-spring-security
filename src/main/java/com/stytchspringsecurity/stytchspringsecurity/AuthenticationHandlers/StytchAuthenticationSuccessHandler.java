@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,24 +15,37 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
 @Component
 public class StytchAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    //@Value("${stytch.session.duration}")
+    int duration = 600;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        //All values in here can be accessed from the securitycontext.
         System.out.println("Whoah someones in here!");
         System.out.println(authentication.getCredentials());
-        //Consider using a separate cookie for name : value schema instead.
+
+        //consider encrypting the userid
         Cookie StytchUserCookie = new Cookie("userID",(String)authentication.getPrincipal());
         Cookie StytchSessionTokenCookie = new Cookie("sessionToken", (String)authentication.getCredentials());
-        //Configure this to be configureable, and to match with the stytch session timeout.
-        //You may want to authenticate the token with Stytch.
-        StytchUserCookie.setMaxAge(7200);
+        Cookie StytchProviderTypeCookie = new Cookie("providerType", (String)authentication.getDetails());
+
+        //Consider making these cookies never disappear.
+        StytchUserCookie.setMaxAge(duration);
         StytchUserCookie.setPath("/");
-        StytchSessionTokenCookie.setMaxAge(7200);
-        StytchSessionTokenCookie.setPath("/");
         response.addCookie(StytchUserCookie);
+
+        StytchSessionTokenCookie.setMaxAge(duration);
+        StytchSessionTokenCookie.setPath("/");
         response.addCookie(StytchSessionTokenCookie);
+
+        StytchProviderTypeCookie.setMaxAge(duration);
+        StytchProviderTypeCookie.setPath("/");
+        response.addCookie(StytchProviderTypeCookie);
+
         response.sendRedirect("/");
     }
 }

@@ -6,6 +6,7 @@ import com.stytch.java.consumer.models.oauth.AuthenticateRequest;
 import com.stytch.java.consumer.models.oauth.AuthenticateResponse;
 import com.stytchspringsecurity.stytchspringsecurity.ApplicationConfig.SpringContext;
 import com.stytchspringsecurity.stytchspringsecurity.SecurityConfig.StytchConfigProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,12 +20,19 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
     String projectid = stytchConfigProperties.getProjectid();
     String projectsecret = stytchConfigProperties.getprojectsecret();
 
+    @Value("${stytch.session.duration}")
+    int duration;
+
+
+    //Put the Oauth Attach conditional statement in here.
+    //If a cookie exists,
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userId = null;
         String sessionToken = null;
+        String providerType;
         StytchOauthAuthenticationResponseToken stytchOauthAuthenticationResponseToken = null;
-        AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials(), null,120);
+        AuthenticateRequest authenticateRequest = new AuthenticateRequest((String) authentication.getCredentials(), null,duration);
         StytchResult<AuthenticateResponse> authenticateResponse;
         try {
             authenticateResponse = StytchClient.oauth.authenticateCompletable(authenticateRequest).get();
@@ -41,7 +49,8 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
             System.out.println(((StytchResult.Success<?>) authenticateResponse).getValue());
             userId = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getUserId();
             sessionToken = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getSessionToken();
-            stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId,sessionToken);
+            providerType = ((StytchResult.Success<AuthenticateResponse>) authenticateResponse).getValue().getProviderType();
+            stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId,sessionToken,providerType);
             return stytchOauthAuthenticationResponseToken;
         }
         return null;

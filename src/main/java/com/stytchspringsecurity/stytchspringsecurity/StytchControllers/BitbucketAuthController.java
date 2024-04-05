@@ -5,21 +5,28 @@ import com.stytch.java.common.StytchResult;
 import com.stytch.java.consumer.StytchClient;
 import com.stytch.java.consumer.models.oauth.AttachRequest;
 import com.stytch.java.consumer.models.oauth.AttachResponse;
-import com.stytch.java.consumer.models.oauth.AuthenticateResponse;
-import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
+import com.stytchspringsecurity.stytchspringsecurity.ProcessingMethods.StytchCookieProcessors;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.concurrent.CompletableFuture;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 @RestController
 public class BitbucketAuthController {
-    //userid: user-test-a35e8907-6d96-42fa-816a-07e3b0ae1ad8
+    //Replace this with a request/response controller, and check if a cookie exists.
+    //The existence of a cookie will determine whether or not to go to the provider endpoint,
+    //or provider + oauth attach endpoint.
+
+    @Autowired
+    StytchCookieProcessors stytchCookieProcessors;
+
     @GetMapping("/bitbucketAuth")
-    public RedirectView bitbucketAuth() {
-        /*
+    public void bitbucketAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String sessionToken = stytchCookieProcessors.getSessionToken(request);
         AttachRequest attachRequest = new AttachRequest("bitbucket", "user-test-a35e8907-6d96-42fa-816a-07e3b0ae1ad8");
         StytchResult<AttachResponse> attachResponse;
         String attachToken = null;
@@ -40,11 +47,7 @@ public class BitbucketAuthController {
         }
 
         String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add&oauth_attach_token=" + attachToken;
-        
-         */
-        return new RedirectView("https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add");
-        //return new RedirectView(url);
 
+        response.sendRedirect("https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add");
     }
-
 }
