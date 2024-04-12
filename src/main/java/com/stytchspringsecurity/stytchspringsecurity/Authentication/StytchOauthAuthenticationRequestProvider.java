@@ -1,5 +1,6 @@
 package com.stytchspringsecurity.stytchspringsecurity.Authentication;
 
+import com.stytch.java.common.StytchException;
 import com.stytch.java.common.StytchResult;
 import com.stytch.java.consumer.StytchClient;
 import com.stytch.java.consumer.models.oauth.AuthenticateRequest;
@@ -44,6 +45,7 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
         if (authenticateResponse instanceof StytchResult.Error) {
             var exception = ((StytchResult.Error) authenticateResponse).getException();
             System.out.println(exception.getReason());
+            return null;
         } else {
             //This might be a good place to log the UID of the request
             System.out.println(((StytchResult.Success<?>) authenticateResponse).getValue());
@@ -53,7 +55,6 @@ public class StytchOauthAuthenticationRequestProvider implements AuthenticationP
             stytchOauthAuthenticationResponseToken= new StytchOauthAuthenticationResponseToken(userId,sessionToken,providerType);
             return stytchOauthAuthenticationResponseToken;
         }
-        return null;
     }
 
     @Override

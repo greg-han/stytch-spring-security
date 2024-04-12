@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,11 +22,13 @@ public class BitbucketAuthController {
     @Autowired
     StytchCookieProcessors stytchCookieProcessors;
 
-    @GetMapping("/bitbucketAuth")
-    public void bitbucketAuth(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping("/v1/bitbucketAuth")
+    public void bitbucketAuth(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String sessionToken = stytchCookieProcessors.getSessionToken(request);
         String providerType = stytchCookieProcessors.getProviderType(request);
         String userId = stytchCookieProcessors.getUserId(request);
+        System.out.println("BitbucketController");
+        System.out.println(authentication);
         AttachRequest attachRequest = null;
         StytchResult<AttachResponse> attachResponse;
         String attachToken = null;
@@ -49,15 +52,13 @@ public class BitbucketAuthController {
             if (attachResponse instanceof StytchResult.Error) {
                 var exception = ((StytchResult.Error) attachResponse).getException();
                 System.out.println(exception.getReason());
-            } else {
-                //This might be a good place to log the UID of the request
-                System.out.println("I am attaching");
-                System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
-                attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
-                String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add&oauth_attach_token=" + attachToken;
-                response.sendRedirect(url);
             }
-
+            //This might be a good place to log the UID of the request
+            System.out.println("I am attaching");
+            System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
+            attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
+            String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add&oauth_attach_token=" + attachToken;
+            response.sendRedirect(url);
         }
         else {
             System.out.println("I am not attaching");
