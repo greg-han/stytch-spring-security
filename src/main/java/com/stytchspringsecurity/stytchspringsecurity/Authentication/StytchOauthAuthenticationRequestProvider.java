@@ -1,6 +1,5 @@
 package com.stytchspringsecurity.stytchspringsecurity.Authentication;
 
-import com.stytch.java.common.StytchException;
 import com.stytch.java.common.StytchResult;
 import com.stytch.java.consumer.StytchClient;
 import com.stytch.java.consumer.models.oauth.AuthenticateRequest;
@@ -17,16 +16,9 @@ import java.util.concurrent.ExecutionException;
 
 @Component
 public class StytchOauthAuthenticationRequestProvider implements AuthenticationProvider {
-    StytchConfigProperties stytchConfigProperties = SpringContext.getBean(StytchConfigProperties.class);
-    String projectid = stytchConfigProperties.getProjectid();
-    String projectsecret = stytchConfigProperties.getprojectsecret();
-
     @Value("${stytch.session.duration}")
     int duration;
 
-
-    //Put the Oauth Attach conditional statement in here.
-    //If a cookie exists,
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userId = null;

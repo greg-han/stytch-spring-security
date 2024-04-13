@@ -9,24 +9,12 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
 
     @Override
     public void onApplicationEvent(AbstractAuthenticationEvent event) {
+        //Although the app logs out, this event does't display.
+        if (event instanceof LogoutSuccessEvent) {
+            System.out.println("You've logged out!");
+        }
         if (event instanceof AuthenticationSuccessEvent) {
-            // Handle successful authentication event
             System.out.println("Successful authentication event occurred.");
-        } else if (event instanceof AuthenticationFailureBadCredentialsEvent) {
-            // Handle authentication failure due to bad credentials
-            System.out.println("Authentication failure due to bad credentials.");
-        } else if (event instanceof AuthenticationFailureDisabledEvent) {
-            // Handle authentication failure due to disabled user account
-            System.out.println("Authentication failure due to disabled account.");
-        } else if (event instanceof AuthenticationFailureExpiredEvent) {
-            // Handle authentication failure due to expired credentials
-            System.out.println("Authentication failure due to expired credentials.");
-        } else if (event instanceof AuthenticationFailureCredentialsExpiredEvent) {
-            // Handle authentication failure due to credentials expired
-            System.out.println("Authentication failure due to credentials expired.");
-        } else if (event instanceof AuthenticationFailureLockedEvent) {
-            // Handle authentication failure due to locked user account
-            System.out.println("Authentication failure due to locked account.");
         }
     }
 }

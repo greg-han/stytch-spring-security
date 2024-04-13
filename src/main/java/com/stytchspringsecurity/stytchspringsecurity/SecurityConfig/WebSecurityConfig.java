@@ -20,10 +20,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.*;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.security.web.session.SessionManagementFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -55,10 +58,11 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
 
         http.securityContext( securityContext -> securityContext.requireExplicitSave(false));
-        http.addFilterBefore(
+
+        http.addFilterAfter(
                 new StytchAuthenticationFilter("/authenticate", authManager), CorsFilter.class);
         http.addFilterAfter(
-                new StytchSessionFilter("/"), SessionManagementFilter.class);
+                new StytchSessionFilter("/"), LogoutFilter.class);
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/bitbucketAuth").permitAll()
@@ -67,6 +71,14 @@ public class WebSecurityConfig {
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+
+        http.logout(logout ->
+                logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+                        .addLogoutHandler(new CookieClearingLogoutHandler("userID","sessionToken","providerType"))
+
+        );
+
         return http.build();
 
     }

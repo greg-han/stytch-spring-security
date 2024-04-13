@@ -8,7 +8,6 @@ import com.stytch.java.consumer.models.oauth.AttachResponse;
 import com.stytchspringsecurity.stytchspringsecurity.ProcessingMethods.StytchCookieProcessors;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +34,7 @@ public class BitbucketAuthController {
 
         //The existence of a cookie will determine whether or not to go to the provider endpoint,
         //or provider + oauth attach endpoint.
+        //Consider Removing the sessionToken value to avoid 404 from expired sessions
         if((sessionToken != null || userId !=null) && providerType != null ) {
             if(sessionToken != null) {
                 attachRequest = new AttachRequest(providerType, null, sessionToken);
@@ -57,12 +57,12 @@ public class BitbucketAuthController {
             System.out.println("I am attaching");
             System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
             attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
-            String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add&oauth_attach_token=" + attachToken;
+            String url = "startendpoint" + attachToken;
             response.sendRedirect(url);
         }
         else {
             System.out.println("I am not attaching");
-            response.sendRedirect("https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-fa3bb141-c5fb-4a78-aafc-60b112885add");
+            response.sendRedirect("startendpoint");
         }
     }
 }
