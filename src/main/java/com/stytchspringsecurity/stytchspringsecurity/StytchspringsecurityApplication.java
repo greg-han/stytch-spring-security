@@ -10,7 +10,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication
 public class StytchspringsecurityApplication {
 	public static void main(String[] args) {
-		StytchClient.configure("projectid","projectsecret");
+	//	StytchConfigProperties stytchConfigProperties = SpringContext.getBean(StytchConfigProperties.class);
+		//StytchClient.configure(stytchConfigProperties.getProjectid(),stytchConfigProperties.getProjectsecret());
+		StytchClient.configure("project-test-c5ad69c8-a723-4152-a516-f08f126ef1ac","secret-test-ehaQCwkYIBPKQs-wD65USTfQ_JBtscWnN1w=");
+
 		SpringApplication.run(StytchspringsecurityApplication.class, args);
 	}
 

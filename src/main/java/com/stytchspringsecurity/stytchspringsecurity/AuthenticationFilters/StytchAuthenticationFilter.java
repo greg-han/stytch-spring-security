@@ -1,18 +1,15 @@
 package com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters;
 
-import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestToken;
-import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
-import com.stytchspringsecurity.stytchspringsecurity.AuthenticationHandlers.StytchAuthenticationSuccessHandler;
-import jakarta.servlet.FilterChain;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationTokens.StytchOauthAuthenticationRequestToken;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationTokens.StytchOauthAuthenticationResponseToken;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -56,6 +53,7 @@ public class StytchAuthenticationFilter extends AbstractAuthenticationProcessing
         StytchProviderTypeCookie.setMaxAge(Integer.MAX_VALUE);
         StytchProviderTypeCookie.setPath("/");
         response.addCookie(StytchProviderTypeCookie);
+
         return stytchOauthResponseToken;
     }
 

@@ -1,4 +1,4 @@
-package com.stytchspringsecurity.stytchspringsecurity.Authentication;
+package com.stytchspringsecurity.stytchspringsecurity.AuthenticationTokens;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

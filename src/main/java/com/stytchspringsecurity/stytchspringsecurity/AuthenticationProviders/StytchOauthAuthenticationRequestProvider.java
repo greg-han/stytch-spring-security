@@ -1,11 +1,11 @@
-package com.stytchspringsecurity.stytchspringsecurity.Authentication;
+package com.stytchspringsecurity.stytchspringsecurity.AuthenticationProviders;
 
 import com.stytch.java.common.StytchResult;
 import com.stytch.java.consumer.StytchClient;
 import com.stytch.java.consumer.models.oauth.AuthenticateRequest;
 import com.stytch.java.consumer.models.oauth.AuthenticateResponse;
-import com.stytchspringsecurity.stytchspringsecurity.ApplicationConfig.SpringContext;
-import com.stytchspringsecurity.stytchspringsecurity.SecurityConfig.StytchConfigProperties;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationTokens.StytchOauthAuthenticationRequestToken;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationTokens.StytchOauthAuthenticationResponseToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

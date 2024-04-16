@@ -1,30 +1,23 @@
 package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
-import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestProvider;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters.StytchSessionAuthenticationFilter;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationProviders.StytchOauthAuthenticationRequestProvider;
 import com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters.StytchAuthenticationFilter;
+import com.stytchspringsecurity.stytchspringsecurity.AuthenticationProviders.StytchSessionAuthenticationRequestProvider;
 import com.stytchspringsecurity.stytchspringsecurity.SessionFilters.StytchSessionFilter;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.*;
-import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
@@ -39,11 +32,12 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationManager authManager(
             HttpSecurity http,
-            StytchOauthAuthenticationRequestProvider stytchOauthRequestProvider) throws Exception {
+            StytchOauthAuthenticationRequestProvider stytchOauthRequestProvider, StytchSessionAuthenticationRequestProvider stytchSessionAuthenticationRequestProvider) throws Exception {
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http
                 .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(stytchOauthRequestProvider);
+        authenticationManagerBuilder.authenticationProvider(stytchSessionAuthenticationRequestProvider);
         authenticationManagerBuilder.authenticationEventPublisher(authenticationEventPublisher());
 
         return authenticationManagerBuilder.build();
@@ -61,8 +55,10 @@ public class WebSecurityConfig {
 
         http.addFilterAfter(
                 new StytchAuthenticationFilter("/authenticate", authManager), CorsFilter.class);
-        http.addFilterAfter(
-                new StytchSessionFilter("/"), LogoutFilter.class);
+        http.addFilterBefore(
+               new StytchSessionAuthenticationFilter("/", authManager), StytchAuthenticationFilter.class);
+       // http.addFilterAfter(
+        //        new StytchSessionFilter("/"), LogoutFilter.class);
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/bitbucketAuth").permitAll()
@@ -70,7 +66,9 @@ public class WebSecurityConfig {
         );
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
-                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+                //httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
         http.logout(logout ->
                 logout

@@ -1,6 +1,7 @@
 package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 //Replace with lombok
@@ -28,7 +29,7 @@ public class StytchConfigProperties {
         this.projectid = projectid;
     }
 
-    public String getprojectsecret() {
+    public String getProjectsecret() {
         return projectsecret;
     }
 
