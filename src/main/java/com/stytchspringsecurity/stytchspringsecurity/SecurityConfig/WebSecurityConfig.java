@@ -2,6 +2,7 @@ package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestProvider;
 import com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters.StytchAuthenticationFilter;
+import com.stytchspringsecurity.stytchspringsecurity.LogoutHandlers.StytchLogoutHandler;
 import com.stytchspringsecurity.stytchspringsecurity.SessionFilters.StytchSessionFilter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
@@ -75,8 +76,7 @@ public class WebSecurityConfig {
         http.logout(logout ->
                 logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-                        .addLogoutHandler(new CookieClearingLogoutHandler("userID","sessionToken","providerType"))
-
+                        .addLogoutHandler(new StytchLogoutHandler())
         );
 
         return http.build();

@@ -57,12 +57,12 @@ public class BitbucketAuthController {
             System.out.println("I am attaching");
             System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
             attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
-            String url = "startendpoint" + attachToken;
+            String url = "";
             response.sendRedirect(url);
         }
         else {
             System.out.println("I am not attaching");
-            response.sendRedirect("startendpoint");
+            response.sendRedirect("/");
         }
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication
 public class StytchspringsecurityApplication {
 	public static void main(String[] args) {
-		StytchClient.configure("projectid","projectsecret");
+		StytchClient.configure(null,null);
 		SpringApplication.run(StytchspringsecurityApplication.class, args);
 	}
 
