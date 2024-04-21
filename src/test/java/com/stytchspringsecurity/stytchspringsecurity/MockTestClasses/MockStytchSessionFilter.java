@@ -4,10 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import com.stytch.java.common.StytchException;
-import com.stytch.java.common.StytchResult;
-import com.stytch.java.consumer.StytchClient;
-import com.stytch.java.consumer.models.sessions.AuthenticateRequest;
-import com.stytch.java.consumer.models.sessions.AuthenticateResponse;
 import com.stytchspringsecurity.stytchspringsecurity.ApplicationConfig.SpringContext;
 import com.stytchspringsecurity.stytchspringsecurity.ProcessingMethods.StytchCookieProcessors;
 import jakarta.servlet.FilterChain;
@@ -16,7 +12,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 

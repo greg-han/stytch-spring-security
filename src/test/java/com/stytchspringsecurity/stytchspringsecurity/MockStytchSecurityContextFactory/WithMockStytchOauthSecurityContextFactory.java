@@ -2,15 +2,9 @@ package com.stytchspringsecurity.stytchspringsecurity.MockStytchSecurityContextF
 
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
-import org.springframework.security.web.context.SecurityContextRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WithMockStytchOauthSecurityContextFactory implements WithSecurityContextFactory<WithMockStytchOauthResponseToken> {
     @Override
