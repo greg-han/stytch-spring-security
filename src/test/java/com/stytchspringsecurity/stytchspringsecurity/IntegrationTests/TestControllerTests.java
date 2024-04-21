@@ -5,6 +5,7 @@ import com.stytchspringsecurity.stytchspringsecurity.MockStytchSecurityContextFa
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 public class TestControllerTests {
     private MockMvc mockMvc;
     @BeforeEach
@@ -67,7 +68,8 @@ public class TestControllerTests {
     @Test
     @WithMockStytchOauthResponseToken
     public void authenticatedEndpointTest() throws Exception {
-        mockMvc.perform(get("/v1/test"))
+        mockMvc.perform(get("/v1/test")
+                        .cookie(new Cookie("sessionToken","abc123")))
                 .andExpect(status().isOk());
     }
 

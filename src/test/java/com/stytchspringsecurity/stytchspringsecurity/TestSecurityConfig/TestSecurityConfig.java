@@ -32,17 +32,13 @@ import org.springframework.security.web.context.*;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.filter.CorsFilter;
 
 @TestConfiguration
 @EnableWebSecurity
-@Profile("test")
+@ActiveProfiles("test")
 public class TestSecurityConfig {
-
-    @Bean
-    public AuthenticationEventPublisher authenticationEventPublisher() {
-        return new DefaultAuthenticationEventPublisher();
-    }
 
     @Bean
     public AuthenticationManager authManager(
@@ -52,7 +48,6 @@ public class TestSecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http
                 .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(stytchOauthRequestProvider);
-        authenticationManagerBuilder.authenticationEventPublisher(authenticationEventPublisher());
 
         return authenticationManagerBuilder.build();
     }
@@ -69,8 +64,8 @@ public class TestSecurityConfig {
 
         http.addFilterAfter(
                 new StytchAuthenticationFilter("/authenticate", authManager), CorsFilter.class);
-       // http.addFilterAfter(
-        //        new MockStytchSessionFilter("/"), LogoutFilter.class);
+        http.addFilterAfter(
+                new MockStytchSessionFilter("/"), LogoutFilter.class);
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/bitbucketAuth").permitAll()
