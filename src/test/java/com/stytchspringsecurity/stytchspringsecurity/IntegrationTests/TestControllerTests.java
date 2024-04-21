@@ -2,6 +2,7 @@ package com.stytchspringsecurity.stytchspringsecurity.IntegrationTests;
 
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationResponseToken;
 import com.stytchspringsecurity.stytchspringsecurity.MockStytchSecurityContextFactory.WithMockStytchOauthResponseToken;
+import com.stytchspringsecurity.stytchspringsecurity.TestSecurityConfig.TestSecurityConfig;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-//@AutoConfigureMockMvc
+@Import(TestSecurityConfig.class)
 public class TestControllerTests {
     private MockMvc mockMvc;
     @BeforeEach
