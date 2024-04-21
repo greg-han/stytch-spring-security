@@ -25,7 +25,6 @@ public class BitbucketAuthController {
     public void bitbucketAuth(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String sessionToken = stytchCookieProcessors.getSessionToken(request);
         String providerType = stytchCookieProcessors.getProviderType(request);
-        String userId = stytchCookieProcessors.getUserId(request);
         System.out.println("BitbucketController");
         System.out.println(authentication);
         AttachRequest attachRequest = null;
@@ -35,12 +34,9 @@ public class BitbucketAuthController {
         //The existence of a cookie will determine whether or not to go to the provider endpoint,
         //or provider + oauth attach endpoint.
         //Consider Removing the sessionToken value to avoid 404 from expired sessions
-        if((sessionToken != null || userId !=null) && providerType != null ) {
+        if((sessionToken != null) && providerType != null ) {
             if(sessionToken != null) {
                 attachRequest = new AttachRequest(providerType, null, sessionToken);
-            }
-            else if (userId != null){
-                 attachRequest = new AttachRequest(providerType, userId);
             }
             try {
                 attachResponse = StytchClient.oauth.attachCompletable(attachRequest).get();

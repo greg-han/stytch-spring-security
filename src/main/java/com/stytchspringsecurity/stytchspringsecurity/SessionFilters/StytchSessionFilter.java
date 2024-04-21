@@ -47,13 +47,9 @@ public class StytchSessionFilter extends OncePerRequestFilter {
             session.invalidate();
             //May need to clear securitycontextrepository as well.
             SecurityContextHolder.clearContext();
-            Cookie StytchUserCookie = new Cookie("userID",null);
+
             Cookie StytchSessionTokenCookie = new Cookie("sessionToken", null);
             Cookie StytchProviderTypeCookie = new Cookie("providerType", null);
-
-            StytchUserCookie.setMaxAge(0); // Setting the maxAge to 0 deletes the cookie
-            StytchUserCookie.setPath("/"); // Set the path to match the cookie's original path
-            response.addCookie(StytchUserCookie);
 
             StytchSessionTokenCookie.setMaxAge(0);
             StytchSessionTokenCookie.setPath("/");
