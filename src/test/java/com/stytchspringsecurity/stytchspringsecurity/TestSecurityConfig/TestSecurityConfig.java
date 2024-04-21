@@ -1,13 +1,16 @@
-package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
+package com.stytchspringsecurity.stytchspringsecurity.TestSecurityConfig;
 
+import com.stytchspringsecurity.stytchspringsecurity.MockTestClasses.MockStytchSessionFilter;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.*;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import com.stytchspringsecurity.stytchspringsecurity.Authentication.StytchOauthAuthenticationRequestProvider;
 import com.stytchspringsecurity.stytchspringsecurity.AuthenticationFilters.StytchAuthenticationFilter;
 import com.stytchspringsecurity.stytchspringsecurity.LogoutHandlers.StytchLogoutHandler;
 import com.stytchspringsecurity.stytchspringsecurity.SessionFilters.StytchSessionFilter;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
@@ -31,14 +34,16 @@ import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
-@Configuration
+@TestConfiguration
 @EnableWebSecurity
-@Profile("dev")
-public class WebSecurityConfig {
+@Profile("test")
+public class TestSecurityConfig {
+
     @Bean
     public AuthenticationEventPublisher authenticationEventPublisher() {
         return new DefaultAuthenticationEventPublisher();
     }
+
     @Bean
     public AuthenticationManager authManager(
             HttpSecurity http,
@@ -60,12 +65,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
 
-        http.securityContext( securityContext -> securityContext.requireExplicitSave(false));
+        http.securityContext(securityContext -> securityContext.requireExplicitSave(false));
 
         http.addFilterAfter(
                 new StytchAuthenticationFilter("/authenticate", authManager), CorsFilter.class);
-        http.addFilterAfter(
-                new StytchSessionFilter("/"), LogoutFilter.class);
+       // http.addFilterAfter(
+        //        new MockStytchSessionFilter("/"), LogoutFilter.class);
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/bitbucketAuth").permitAll()
@@ -84,5 +89,4 @@ public class WebSecurityConfig {
         return http.build();
 
     }
-
 }

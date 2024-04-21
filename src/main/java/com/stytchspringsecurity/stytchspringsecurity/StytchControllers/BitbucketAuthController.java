@@ -57,12 +57,12 @@ public class BitbucketAuthController {
             System.out.println("I am attaching");
             System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
             attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
-            String url = "";
+            String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-f2c01104-2aa0-4583-9b3b-430a8f9ab980&oauth_attach_token=" + attachToken;
             response.sendRedirect(url);
         }
         else {
             System.out.println("I am not attaching");
-            response.sendRedirect("/");
+            response.sendRedirect("https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-f2c01104-2aa0-4583-9b3b-430a8f9ab980");
         }
     }
 }
