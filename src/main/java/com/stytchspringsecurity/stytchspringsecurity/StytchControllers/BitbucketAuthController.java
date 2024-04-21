@@ -9,6 +9,7 @@ import com.stytchspringsecurity.stytchspringsecurity.ProcessingMethods.StytchCoo
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,9 @@ import java.util.concurrent.ExecutionException;
 public class BitbucketAuthController {
     @Autowired
     StytchCookieProcessors stytchCookieProcessors;
+
+    @Value("${stytch.bitbucket.starturl}")
+    String starturl;
 
     @GetMapping("/v1/bitbucketAuth")
     public void bitbucketAuth(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -53,12 +57,12 @@ public class BitbucketAuthController {
             System.out.println("I am attaching");
             System.out.println(((StytchResult.Success<?>) attachResponse).getValue());
             attachToken = ((StytchResult.Success<AttachResponse>) attachResponse).getValue().getOauthAttachToken();
-            String url = "https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-f2c01104-2aa0-4583-9b3b-430a8f9ab980&oauth_attach_token=" + attachToken;
+            String url = starturl + "&oauth_attach_token=" + attachToken;
             response.sendRedirect(url);
         }
         else {
             System.out.println("I am not attaching");
-            response.sendRedirect("https://test.stytch.com/v1/public/oauth/bitbucket/start?public_token=public-token-test-f2c01104-2aa0-4583-9b3b-430a8f9ab980");
+            response.sendRedirect(starturl);
         }
     }
 }
