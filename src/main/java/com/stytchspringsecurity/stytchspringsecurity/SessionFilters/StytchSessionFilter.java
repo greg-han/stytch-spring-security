@@ -31,7 +31,7 @@ public class StytchSessionFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        System.out.println(securityContext);
+
         boolean sessionValid = false;
         try {
             sessionValid = validateSession(request);
@@ -45,7 +45,7 @@ public class StytchSessionFilter extends OncePerRequestFilter {
         if (!sessionValid) {
             HttpSession session = request.getSession();
             session.invalidate();
-            //May need to clear securitycontextrepository as well.
+
             SecurityContextHolder.clearContext();
 
             Cookie StytchSessionTokenCookie = new Cookie("sessionToken", null);
@@ -76,9 +76,6 @@ public class StytchSessionFilter extends OncePerRequestFilter {
                     System.out.println(exception.getReason());
                     return false;
                 }
-                System.out.println("Session Response");
-                System.out.println(stytchAuthenticateResponse);
-                System.out.println("Session Token: " + sessionToken);
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {

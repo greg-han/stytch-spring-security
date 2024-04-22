@@ -21,7 +21,6 @@ public class StytchCookieProcessors implements CookieProcessors {
         }
         return null;
     }
-
     @Override
     public String getProviderType(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
