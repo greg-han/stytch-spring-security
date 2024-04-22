@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutionException;
 public class BitbucketAuthController {
     @Autowired
     StytchCookieProcessors stytchCookieProcessors;
-
     @Value("${stytch.bitbucket.starturl}")
     String starturl;
 
