@@ -21,7 +21,6 @@ public class StytchCookieProcessors implements CookieProcessors {
         }
         return null;
     }
-
     @Override
     public String getProviderType(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
@@ -36,17 +35,4 @@ public class StytchCookieProcessors implements CookieProcessors {
         return null;
     }
 
-    @Override
-    public String getUserId(HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("userId")) {
-                    String userId = cookie.getValue();
-                    return userId;
-                }
-            }
-        }
-        return null;
-    }
 }
