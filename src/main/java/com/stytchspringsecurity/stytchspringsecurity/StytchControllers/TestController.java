@@ -6,12 +6,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Use this controller to test authentication status.
+ */
 @RestController
 public class TestController {
-
     @GetMapping("/v1/test")
     public void testEndpoint(@NotNull HttpServletRequest request, Authentication authentication) {
-       System.out.println("Thanks for being authenticated!");
-       System.out.println(authentication);
+            System.out.println("Thanks for being authenticated!");
+            System.out.println(authentication);
     }
 }

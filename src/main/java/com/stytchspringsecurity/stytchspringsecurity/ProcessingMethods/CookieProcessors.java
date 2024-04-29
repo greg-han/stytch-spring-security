@@ -7,11 +7,10 @@ public interface CookieProcessors {
 
     String getProviderType(HttpServletRequest request);
 
-    String getUserId(HttpServletRequest request);
 
     public interface CookieExtractor {
         String getSessionToken(HttpServletRequest request);
         String getProviderType(HttpServletRequest request);
-        String getUserId(HttpServletRequest request);
+
     }
 }

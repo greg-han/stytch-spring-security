@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.springframework.security:spring-security-oauth2-core:6.2.2")
 	implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
 	implementation("org.springframework.security:spring-security-oauth2-client:6.2.2")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.2.5")
+
 
 
 

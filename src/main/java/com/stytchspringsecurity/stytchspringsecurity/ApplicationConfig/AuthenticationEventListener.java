@@ -4,6 +4,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.*;
 import org.springframework.stereotype.Component;
 
+/**
+ * Class for listening
+ */
 @Component
 public class AuthenticationEventListener implements ApplicationListener<AbstractAuthenticationEvent> {
 
