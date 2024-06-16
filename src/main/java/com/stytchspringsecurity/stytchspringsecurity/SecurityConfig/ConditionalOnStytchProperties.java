@@ -8,6 +8,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Optional Annotation for classes that may rely on stytch.config.projectid
+ * and stytch.config.projectsecret for applicationcontext related config.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 @ConditionalOnProperty(

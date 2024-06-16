@@ -3,8 +3,11 @@ package com.stytchspringsecurity.stytchspringsecurity.SecurityConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-//Replace with lombok
 @Component
+@ConditionalOnStytchProperties
+/*
+   Optional POJO for Config Property Use
+ */
 public class StytchConfigProperties {
 
     @Value("${stytch.config.projectid}")

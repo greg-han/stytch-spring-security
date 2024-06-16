@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 
 public class StytchOauthAuthenticationResponseToken extends AbstractAuthenticationToken{
-        //consider encrypting this field.
         private final String userId;
         private final String sessionToken;
         private final String providerType;
